@@ -1,5 +1,4 @@
 import "../../index.css";
-import Dashboard from "../../components/dashboardV0";
 import UserCards from "../../components/users-cards";
 import DashboardHeader from "../../components/dashboard-header";
 import DashboardLayout from "../../components/dashboard-layout";
@@ -7,8 +6,15 @@ import { FeesCollectionChart } from "../../components/revenue-chart";
 import { Card } from "@/components/ui/card";
 import CustomSelector from "../../components/CustomSelector";
 import AppointmentCalendar from "../calender";
+import { Navigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 function AdminDashboard() {
+  const token = useSelector((state: any) => state?.user?.token);
+  if (!token) {
+    return <Navigate to="/" />;
+  }
+
   return (
     <>
       <DashboardLayout>

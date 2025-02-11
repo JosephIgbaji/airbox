@@ -5,13 +5,8 @@ import AllAppointment from "./pages/allAppointments";
 import { Login } from "./pages/Login";
 import { Signup } from "./pages/Signup";
 import LandingPage from "./pages/LandingPage";
-// import ParentDashboard from "./pages/ParentDashboard";
-// import StudentDashboard from "./pages/StudentDashBoard";
-// import TeacherDashboard from "./pages/TeacherDashboard";
-// import AdminClasses from "./pages/admin/Classes";
 
 function App() {
-  // const [showNotification, setShowNotification] = useState(true);
   return (
     <>
       <Routes>

@@ -1,39 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthLayout } from "../components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useLoginUserMutation } from "../service/user.service";
+import rtkMutation from "../utils/rtkMutation";
+import { showAlert } from "../static/alert";
 
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  // const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  const [loginUser, { error, isSuccess }] = useLoginUserMutation({
+    provideTag: ["User"],
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      showAlert("", "Login Successful!", "success");
+      navigate("/dashboard");
+    } else if (error) {
+      showAlert("Oops", error || "An error occurred", "error");
+    }
+  }, [isSuccess, error, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
-    // Basic validation
     if (!email || !password) {
-      setError("Please fill in all fields");
+      showAlert("Oops", error || "Please fill in all fields", "error");
       return;
     }
 
-    // Here you would typically make an API call to authenticate the user
-    // For this example, we'll just simulate a successful login
     try {
-      // Simulating an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // If login is successful, redirect to the main app
-      navigate("/app");
+      await rtkMutation(loginUser, { email, password });
     } catch (err) {
-      setError("Invalid email or password");
+      showAlert("Oops", err || "An error occurred", "error");
     }
   };
 
@@ -51,7 +59,7 @@ export function Login() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            // required
           />
         </div>
         <div className="space-y-2">
@@ -62,7 +70,7 @@ export function Login() {
             placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            // required
           />
         </div>
         {error && (

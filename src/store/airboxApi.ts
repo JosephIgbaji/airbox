@@ -21,10 +21,9 @@ export const airboxApi = createApi({
 export const { useGetBookingsQuery, useCreateBookingMutation } = airboxApi
 
 interface Booking {
-  id: string
   name: string
   email: string
-  date: string
+  date: Date
   time: string
 }
 
