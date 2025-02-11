@@ -1,40 +1,50 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { AuthLayout } from "../components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
+import { useRegisterUserMutation } from "../service/user.service";
+import rtkMutation from "../utils/rtkMutation";
+import { showAlert } from "../static/alert";
 
 export function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const [registerUser, { error, isSuccess }] = useRegisterUserMutation({
+    provideTag: ["User"],
+  });
+
+  useEffect(() => {
+    if (isSuccess) {
+      showAlert("", "Register Successful!", "success");
+      navigate("/login");
+    } else if (error) {
+      console.log("Error: ", error);
+      showAlert("Oops", error.data?.error || "An error occurred", "error");
+      // showAlert("Oops", "An error occurred", "error");
+    }
+  }, [isSuccess, error, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError("");
 
-    // Basic validation
     if (!name || !email || !password) {
-      setError("Please fill in all fields");
+      showAlert("Oops", error || "Please fill in all fields", "error");
       return;
     }
 
-    // Here you would typically make an API call to create the user account
-    // For this example, we'll just simulate a successful signup
-    try {
-      // Simulating an API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+    const data = { name, email, password };
 
-      // If signup is successful, redirect to the login page
-      navigate("/login");
+    try {
+      await rtkMutation(registerUser, data);
     } catch (err) {
-      setError("Error creating account. Please try again.");
+      console.error(err);
+      showAlert("Oops", "An error occurred", "error");
     }
   };
 
@@ -74,11 +84,7 @@ export function Signup() {
             required
           />
         </div>
-        {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
+
         <Button type="submit" className="w-full">
           Sign Up
         </Button>

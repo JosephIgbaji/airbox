@@ -29,33 +29,17 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link, NavLink } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import Appointments from "./Appointments";
-
-// Menu items.
-
-const items = [
-  {
-    icon: Home,
-    label: "Dashboard",
-    href: "/dashboard",
-  },
-
-  {
-    icon: MessageCircleMore,
-    label: "Appointment",
-    href: "/appointment",
-  },
-  {
-    icon: Settings,
-    label: "Settings",
-    href: "/",
-  },
-];
+import { useSelector, useDispatch } from "react-redux";
+import { logoutUser } from "../redux/userSlice";
 
 export function AppSidebar() {
+  const user = useSelector((state: any) => state?.user?.user);
+  // console.log(user);
+  const dispatch = useDispatch();
+
   return (
     <div className="relative">
       <Sidebar collapsible="icon">
@@ -152,7 +136,7 @@ export function AppSidebar() {
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
                   <SidebarMenuButton>
-                    <User2 /> Username
+                    <User2 /> {user?.name}
                     <ChevronUp className="ml-auto" />
                   </SidebarMenuButton>
                 </DropdownMenuTrigger>
@@ -164,8 +148,8 @@ export function AppSidebar() {
                     <span>Account</span>
                   </DropdownMenuItem>
 
-                  <DropdownMenuItem>
-                    <span>Sign out</span>
+                  <DropdownMenuItem onClick={() => dispatch(logoutUser())}>
+                    <span>Logout</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>

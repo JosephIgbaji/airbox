@@ -11,12 +11,12 @@ const userSlice = createSlice({
   reducers: {
     updateUser(state, action) {
       const userObj = action.payload;
-      let newState = { ...state };
+      const newState = { ...state };
       Object.assign(newState, userObj);
       return newState;
     },
     logoutUser(state) {
-      let newState = { ...state };
+      const newState = { ...state };
       newState.user = null;
       newState.token = null;
       return newState;

@@ -14,10 +14,11 @@ export const userApiSlice = apiSlice.injectEndpoints({
       onQueryStarted: async (credentials, { dispatch, queryFulfilled }) => {
         try {
           const { data } = await queryFulfilled;
+          console.log(data, "data");
           // const { accessToken, user } = data;
-          const accessToken = data.data.accessToken;
-          const user = data.data.user;
-          const refreshToken = data.data.user.refreshToken;
+          const accessToken = data.token;
+          const user = data.data;
+          const refreshToken = data.token;
 
           console.log(accessToken, "data");
 

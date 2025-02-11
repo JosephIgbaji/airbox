@@ -1,10 +1,10 @@
 // enviroments
 const environment = {
   production: {
-    API_BASE_URL: "https://",
+    API_BASE_URL: "https://airbox-backend.vercel.app/api/",
   },
   development: {
-    API_BASE_URL: "http://localhost:5000/",
+    API_BASE_URL: "http://localhost:5000/api/",
   },
 };
 

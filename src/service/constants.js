@@ -1,6 +1,6 @@
 // Auth constants
-export const LOGIN = "user/login";
-export const REGISTER = "user";
-export const GETUSER = "user/me";
-export const LOGOUT = "user/logout";
-export const GETALLAPPOINTMENT = "user/logout";
+export const LOGIN = "auth/login";
+export const REGISTER = "auth/register";
+export const GETUSER = "auth/getuser";
+export const GETALLBOOKINGS = "bookings/";
+export const GETMETRICS = "metrics/";

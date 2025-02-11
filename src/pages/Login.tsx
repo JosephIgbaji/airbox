@@ -6,7 +6,6 @@ import { AuthLayout } from "../components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 import { useLoginUserMutation } from "../service/user.service";
 import rtkMutation from "../utils/rtkMutation";
 import { showAlert } from "../static/alert";
@@ -14,7 +13,6 @@ import { showAlert } from "../static/alert";
 export function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const [loginUser, { error, isSuccess }] = useLoginUserMutation({
@@ -26,7 +24,9 @@ export function Login() {
       showAlert("", "Login Successful!", "success");
       navigate("/dashboard");
     } else if (error) {
-      showAlert("Oops", error || "An error occurred", "error");
+      console.log("Error: ", error);
+      // showAlert("Oops", error || "An error occurred", "error");
+      showAlert("Oops", "An error occurred", "error");
     }
   }, [isSuccess, error, navigate]);
 
@@ -38,10 +38,13 @@ export function Login() {
       return;
     }
 
+    const data = { email, password };
+
     try {
-      await rtkMutation(loginUser, { email, password });
+      await rtkMutation(loginUser, data);
     } catch (err) {
-      showAlert("Oops", err || "An error occurred", "error");
+      console.error(err);
+      showAlert("Oops", err?.data?.error || "An error occurred", "error");
     }
   };
 
@@ -73,11 +76,6 @@ export function Login() {
             // required
           />
         </div>
-        {error && (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        )}
         <Button type="submit" className="w-full">
           Login
         </Button>
