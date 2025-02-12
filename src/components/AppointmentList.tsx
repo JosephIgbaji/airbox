@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { format } from "date-fns";
-import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AppointmentMiniTable } from "./AppointmentMiniTable";
 import { useGetAllBookingQuery } from "../service/booking.service";
