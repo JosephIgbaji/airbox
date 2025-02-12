@@ -11,8 +11,12 @@ import { useSelector } from "react-redux";
 
 function AdminDashboard() {
   const token = useSelector((state: any) => state?.user?.token);
-  if (!token) {
-    return <Navigate to="/" />;
+  const expiration = useSelector((state: any) => state?.user?.expiration);
+
+  // console.log(new Date().getTime() > expiration);
+  // if (!token) {
+  if (!token || !expiration || new Date().getTime() > expiration) {
+    return <Navigate to="/login" />;
   }
 
   return (

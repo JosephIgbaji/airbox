@@ -1,9 +1,18 @@
+import { useSelector } from "react-redux";
 import { AppSidebar } from "./app-sidebar";
 import TopHeader from "./TopHeader";
 import { SidebarProvider } from "./ui/sidebar";
+import { Navigate } from "react-router-dom";
 
 function DashboardLayout({ children }) {
-  //   const [showNotification, setShowNotification] = useState(true);
+  const token = useSelector((state: any) => state?.user?.token);
+  const expiration = useSelector((state: any) => state?.user?.expiration);
+
+  // console.log(new Date().getTime() > expiration);
+  // if (!token) {
+  if (!token || !expiration || new Date().getTime() > expiration) {
+    return <Navigate to="/login" />;
+  }
   return (
     <>
       <SidebarProvider>

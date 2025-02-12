@@ -1,47 +1,35 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useNavigate, Navigate } from "react-router-dom";
 import { format } from "date-fns";
 // import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
 import { CalendarIcon } from "lucide-react";
-
 import { cn } from "@/lib/utils";
-
 import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-
-// interface BookAppointmentProps {
-//   selectedDate: Date;
-// }
-
-// Mock API functions
-// const fetchAvailableSlots = async (date: string) => {
-//   // Simulating API call
-//   await new Promise((resolve) => setTimeout(resolve, 500));
-//   return ["09:00", "10:00", "11:00", "14:00", "15:00", "16:00"];
-// };
-
-// const bookAppointment = async (appointment: {
-//   date: Date;
-//   time: string;
-//   name: string;
-// }) => {
-//   // Simulating API call
-//   await new Promise((resolve) => setTimeout(resolve, 500));
-//   return { success: true, message: "Appointment booked successfully!" };
-// };
+import rtkMutation from "../utils/rtkMutation";
+import { useAddBookingMutation } from "../service/booking.service";
+import { showAlert } from "../service/static/alert";
+import { useSelector } from "react-redux";
 
 export default function BookAppointment() {
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
+  const [addBooking, { error, isSuccess }] = useAddBookingMutation({
+    provideTag: ["Booking"],
+  });
+  const navigate = useNavigate();
+
+  const token = useSelector((state: any) => state?.user?.token);
+  const expiration = useSelector((state: any) => state?.user?.expiration);
 
   const [timeSlots, setTimeSlots] = useState([
     "09:00",
@@ -52,30 +40,42 @@ export default function BookAppointment() {
     "16:00",
   ]);
 
-  // const formattedDate = format(date, "yyyy-MM-dd");
+  useEffect(() => {
+    if (isSuccess) {
+      showAlert("", "Booking Successful!", "success");
+      setDate(undefined);
+      setTitle("");
+      setSelectedTime(null);
+    } else if (error) {
+      console.log("Error: ", error);
+      showAlert("Oops", error?.data?.error || "An error occurred", "error");
+      // showAlert("Oops", "An error occurred", "error");
+    }
+  }, [isSuccess, error, navigate]);
 
-  // const { data: availableSlots, isLoading } = useQuery({
-  //   queryKey: ["availableSlots", formattedDate],
-  //   queryFn: () => fetchAvailableSlots(formattedDate),
-  // });
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!token || !expiration || new Date().getTime() > expiration) {
+      return <Navigate to="/login" />;
+    }
 
-  // const bookMutation = useMutation({
-  //   mutationFn: bookAppointment,
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries({
-  //       queryKey: ["availableSlots", formattedDate],
-  //     });
-  //     setSelectedTime(null);
-  //     setName("");
-  //   },
-  // });
+    if (!selectedTime || !title || !date) {
+      showAlert("Oops", error || "Please fill in all fields", "error");
+      return;
+    }
 
-  const handleBook = () => {
-    if (selectedTime && name) {
-      // bookMutation.mutate({ date: formattedDate, time: selectedTime, name });
+    const data = { time: selectedTime, date, title };
+    console.log("data: ", data);
+
+    try {
+      await rtkMutation(addBooking, data);
+    } catch (err) {
+      console.error(err);
+      showAlert("Oops", err?.data?.error || "An error occurred", "error");
     }
   };
-  // if (isLoading) return <div>Loading available slots...</div>;
+
+  // const formattedDate = format(date, "yyyy-MM-dd");
 
   return (
     <Card className="w-full">
@@ -145,7 +145,7 @@ export default function BookAppointment() {
             </Popover>
           </div>
           <Button
-            onClick={handleBook}
+            onClick={handleSubmit}
             disabled={!selectedTime || !title || !date}
             className="w-full"
           >

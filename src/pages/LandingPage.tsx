@@ -16,6 +16,7 @@ export default function LandingPage() {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
   };
+
   return (
     <div className="min-h-screen dark:bg-background to-gray-100 dark:to-gray-900">
       {/* Header */}

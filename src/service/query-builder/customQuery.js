@@ -1,7 +1,7 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import enviroment from "../../configs/environment.config";
 import { logoutUser } from "../../redux/userSlice";
-import { showAlert } from "../../static/alert";
+import { showAlert } from "../static/alert";
 
 const baseQuery = fetchBaseQuery({
   baseUrl: enviroment.API_BASE_URL,

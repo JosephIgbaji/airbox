@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useLoginUserMutation } from "../service/user.service";
 import rtkMutation from "../utils/rtkMutation";
-import { showAlert } from "../static/alert";
+import { showAlert } from "../service/static/alert";
 
 export function Login() {
   const [email, setEmail] = useState("");

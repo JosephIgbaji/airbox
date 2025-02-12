@@ -2,8 +2,6 @@ import {
   Home,
   ChevronUp,
   User2,
-  MessageCircleMore,
-  Settings,
   SettingsIcon,
   CalendarIcon,
   LayoutDashboardIcon,
@@ -29,16 +27,22 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { useSelector, useDispatch } from "react-redux";
 import { logoutUser } from "../redux/userSlice";
+import { showAlert } from "../service/static/alert";
 
 export function AppSidebar() {
   const user = useSelector((state: any) => state?.user?.user);
   // console.log(user);
+  const navigate = useNavigate();
   const dispatch = useDispatch();
+  const logout = () => {
+    dispatch(logoutUser());
+    showAlert("", "You've ended your current session", "success");
+  };
 
   return (
     <div className="relative">
@@ -49,7 +53,7 @@ export function AppSidebar() {
           </div>
           <SidebarHeader>
             <SidebarMenuItem>
-              <SidebarMenuButton>
+              <SidebarMenuButton onClick={() => navigate("/")}>
                 <Home /> Airbox
               </SidebarMenuButton>
             </SidebarMenuItem>
@@ -144,11 +148,11 @@ export function AppSidebar() {
                   side="top"
                   className="w-[--radix-popper-anchor-width]"
                 >
-                  <DropdownMenuItem>
+                  {/* <DropdownMenuItem>
                     <span>Account</span>
-                  </DropdownMenuItem>
+                  </DropdownMenuItem> */}
 
-                  <DropdownMenuItem onClick={() => dispatch(logoutUser())}>
+                  <DropdownMenuItem onClick={logout}>
                     <span>Logout</span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

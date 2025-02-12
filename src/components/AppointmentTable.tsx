@@ -33,139 +33,211 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import { Switch } from "@/components/ui/switch";
 
-const data: Payment[] = [
-  {
-    id: "m5gr84i9",
-    amount: 316,
-    status: "success",
-    email: "ken99@yahoo.com",
-  },
-  {
-    id: "3u1reuv4",
-    amount: 242,
-    status: "success",
-    email: "Abe45@gmail.com",
-  },
-  {
-    id: "derv1ws0",
-    amount: 837,
-    status: "processing",
-    email: "Monserrat44@gmail.com",
-  },
-  {
-    id: "5kma53ae",
-    amount: 874,
-    status: "success",
-    email: "Silas22@gmail.com",
-  },
-  {
-    id: "bhqecj4p",
-    amount: 721,
-    status: "failed",
-    email: "carmella@hotmail.com",
-  },
-];
+import {
+  useGetAllBookingQuery,
+  useDeleteBookingMutation,
+  useUpdateBookingMutation,
+} from "../service/booking.service";
+import rtkMutation from "./../utils/rtkMutation";
+// import axios from "axios";
+// import { useSelector } from "react-redux";
 
-export type Payment = {
-  id: string;
-  amount: number;
-  status: "pending" | "processing" | "success" | "failed";
-  email: string;
+type Booking = {
+  _id: string;
+  date: Date;
+  status: string;
+  time: string;
+  title: string;
+  price: number;
 };
 
-export const columns: ColumnDef<Payment>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={
-          table.getIsAllPageRowsSelected() ||
-          (table.getIsSomePageRowsSelected() && "indeterminate")
-        }
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => (
-      <Checkbox
-        checked={row.getIsSelected()}
-        onCheckedChange={(value) => row.toggleSelected(!!value)}
-        aria-label="Select row"
-      />
-    ),
-    enableSorting: false,
-    enableHiding: false,
-  },
-  {
-    accessorKey: "status",
-    header: "Status",
-    cell: ({ row }) => (
-      <div className="capitalize">{row.getValue("status")}</div>
-    ),
-  },
-  {
-    accessorKey: "email",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Email
-          <ArrowUpDown />
-        </Button>
-      );
-    },
-    cell: ({ row }) => <div className="lowercase">{row.getValue("email")}</div>,
-  },
-  {
-    accessorKey: "amount",
-    header: () => <div className="text-right">Amount</div>,
-    cell: ({ row }) => {
-      const amount = parseFloat(row.getValue("amount"));
-
-      // Format the amount as a dollar amount
-      const formatted = new Intl.NumberFormat("en-US", {
-        style: "currency",
-        currency: "USD",
-      }).format(amount);
-
-      return <div className="text-right font-medium">{formatted}</div>;
-    },
-  },
-  {
-    id: "actions",
-    enableHiding: false,
-    cell: ({ row }) => {
-      const payment = row.original;
-
-      return (
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
-              <MoreHorizontal />
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
-
-            <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
-            >
-              Edit
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>Delete</DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
-      );
-    },
-  },
-];
-
 export function AppointmentTable() {
+  const { data, isLoading, refetch } = useGetAllBookingQuery();
+  const [deleteBooking] = useDeleteBookingMutation();
+  const [updateBooking, { error, isSuccess }] = useUpdateBookingMutation({
+    provideTag: ["Booking"],
+  });
+
+  React.useEffect(() => {
+    if (isSuccess) {
+      refetch();
+    }
+  }, [isSuccess, deleteBooking, updateBooking]);
+
+  const HandleDelete = async (id: string) => {
+    try {
+      await deleteBooking(id); // Call the delete mutation
+      await refetch(); // Refetch the booking data after deleting
+    } catch (error) {
+      console.error("Error deleting booking:", error);
+    }
+  };
+
+  const handleStatusToggle = async (
+    bookingId: string,
+    currentStatus: string
+  ) => {
+    const newStatus = currentStatus === "confirmed" ? "canceled" : "confirmed";
+    try {
+      await rtkMutation(
+        updateBooking({ id: bookingId, data: { status: newStatus } })
+      );
+    } catch (error) {
+      console.error("Error updating booking status:", error);
+    }
+  };
+
+  const columns: ColumnDef<Booking>[] = [
+    {
+      id: "select",
+      header: ({ table }) => (
+        <Checkbox
+          checked={
+            table.getIsAllPageRowsSelected() ||
+            (table.getIsSomePageRowsSelected() && "indeterminate")
+          }
+          onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+          aria-label="Select all"
+        />
+      ),
+      cell: ({ row }) => (
+        <Checkbox
+          checked={row.getIsSelected()}
+          onCheckedChange={(value) => row.toggleSelected(!!value)}
+          aria-label="Select row"
+        />
+      ),
+      enableSorting: false,
+      enableHiding: false,
+    },
+
+    {
+      accessorKey: "title",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Title
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("title")}</div>
+      ),
+    },
+    {
+      accessorKey: "date",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Date
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => {
+        const date = new Date(row.getValue("date"));
+        const formattedDate = date.toLocaleDateString("en-US", {
+          weekday: "long",
+          year: "numeric",
+          month: "long",
+          day: "numeric",
+        });
+        return <div className="titlecase">{formattedDate}</div>;
+      },
+    },
+    {
+      accessorKey: "time",
+      header: ({ column }) => {
+        return (
+          <Button
+            variant="ghost"
+            onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+          >
+            Time
+            <ArrowUpDown />
+          </Button>
+        );
+      },
+      cell: ({ row }) => (
+        <div className="lowercase">{row.getValue("time")}</div>
+      ),
+    },
+    {
+      accessorKey: "price",
+      header: () => <div className="text-right">Amount</div>,
+      cell: ({ row }) => {
+        const amount = parseFloat(row.getValue("price"));
+
+        // Format the amount as a dollar amount
+        const formatted = new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+        }).format(amount);
+
+        return <div className="text-right font-medium">{formatted}</div>;
+      },
+    },
+    {
+      id: "status",
+      header: "Status",
+      cell: ({ row }) => {
+        const booking = row.original;
+        const isConfirmed = booking.status === "confirmed";
+
+        return (
+          <Switch
+            checked={isConfirmed}
+            onCheckedChange={() =>
+              handleStatusToggle(booking._id, booking.status)
+            } // Pass correct ID and status
+          />
+        );
+      },
+      enableSorting: false,
+      enableHiding: false,
+    },
+    {
+      id: "actions",
+      enableHiding: false,
+      cell: ({ row }) => {
+        const payment = row.original;
+
+        return (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" className="h-8 w-8 p-0">
+                <span className="sr-only">Open menu</span>
+                <MoreHorizontal />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
+
+              <DropdownMenuItem
+              // onClick={() => useUpdateBookingMutation(payment._id)}
+              >
+                Edit
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => HandleDelete(payment._id)}>
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        );
+      },
+    },
+  ];
+
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
     []
@@ -193,22 +265,24 @@ export function AppointmentTable() {
     },
   });
 
+  if (isLoading) return <div>Loading...</div>;
+
   return (
     <div className="w-full">
       <div className="flex items-center justify-between py-4">
         <div>
           <Input
             placeholder="Filter by title"
-            value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
+            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
             onChange={(event) =>
-              table.getColumn("email")?.setFilterValue(event.target.value)
+              table.getColumn("title")?.setFilterValue(event.target.value)
             }
             className="max-w-sm"
           />
         </div>
         <div>
           <Button variant="outline" className="m-auto mr-8 ">
-            Book Appointment
+            Add Booking
           </Button>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -312,6 +386,7 @@ export function AppointmentTable() {
           </Button>
         </div>
       </div>
+      {}
     </div>
   );
 }

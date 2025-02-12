@@ -1,8 +1,10 @@
 import { createSlice, createSelector } from "@reduxjs/toolkit";
 
+
 const initialState = {
   user: null,
   token: null,
+  expiration: null,
 };
 
 const userSlice = createSlice({
@@ -12,6 +14,8 @@ const userSlice = createSlice({
     updateUser(state, action) {
       const userObj = action.payload;
       const newState = { ...state };
+      const expirationTime = new Date().getTime() + 3600 * 1000; // 1 hour from now
+      userObj.expiration = expirationTime;
       Object.assign(newState, userObj);
       return newState;
     },
@@ -19,6 +23,7 @@ const userSlice = createSlice({
       const newState = { ...state };
       newState.user = null;
       newState.token = null;
+      newState.expiration = null;
       return newState;
     },
   },
