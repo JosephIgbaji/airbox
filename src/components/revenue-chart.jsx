@@ -44,7 +44,7 @@ const options = {
 
 export function FeesCollectionChart() {
   const { data: metricData, isLoading, refetch } = useGetAllMetricQuery();
-  console.log("MetricRevenue: ", metricData);
+  // console.log("MetricRevenue: ", metricData);
   const [revenue, setRevenue] = useState([]);
   const [totalBooking, setTotalBooking] = useState([]);
   const [label, setLabel] = useState([]);

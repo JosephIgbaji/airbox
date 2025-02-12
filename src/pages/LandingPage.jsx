@@ -6,7 +6,7 @@ import { useSelector } from "react-redux";
 
 export default function LandingPage() {
   const user = useSelector((state) => state?.user?.user);
-  console.log("User: ", user);
+  // console.log("User: ", user);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {

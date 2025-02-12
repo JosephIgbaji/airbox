@@ -11,16 +11,15 @@ import AppointmentList from "@/components/AppointmentList";
 export default function AppointmentCalendar() {
   const [addEvent, setAddEvent] = useState(false);
 
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
+  const [selectedDate, setSelectedDate] =
+    (useState < Date) | (undefined > new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
-  const handleDateSelect = (date: Date | undefined) => {
+  const handleDateSelect = (date) => {
     setSelectedDate(date);
   };
 
-  const handleMonthChange = (increment: number) => {
+  const handleMonthChange = (increment) => {
     setCurrentMonth((prevMonth) => {
       const newMonth = new Date(prevMonth);
       newMonth.setMonth(newMonth.getMonth() + increment);

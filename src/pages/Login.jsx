@@ -6,49 +6,49 @@ import { AuthLayout } from "../components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useRegisterUserMutation } from "../service/user.service";
+import { useLoginUserMutation } from "../service/user.service";
 import rtkMutation from "../utils/rtkMutation";
 import { showAlert } from "../service/static/alert";
 import { useSelector } from "react-redux";
 
-export function Signup() {
-  const token = useSelector((state: any) => state?.user?.token);
-  const expiration = useSelector((state: any) => state?.user?.expiration);
+export function Login() {
+  const token = useSelector((state) => state?.user?.token);
+  const expiration = useSelector((state) => state?.user?.expiration);
 
-  const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const [registerUser, { error, isSuccess }] = useRegisterUserMutation({
+
+  const [loginUser, { error, isSuccess }] = useLoginUserMutation({
     provideTag: ["User"],
   });
 
   useEffect(() => {
     if (isSuccess) {
-      showAlert("", "Register Successful!", "success");
-      navigate("/login");
+      showAlert("", "Login Successful!", "success");
+      navigate("/");
     } else if (error) {
       console.log("Error: ", error);
-      showAlert("Oops", error.data?.error || "An error occurred", "error");
-      // showAlert("Oops", "An error occurred", "error");
+      // showAlert("Oops", error || "An error occurred", "error");
+      showAlert("Oops", "An error occurred", "error");
     }
   }, [isSuccess, error, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!name || !email || !password) {
+    if (!email || !password) {
       showAlert("Oops", error || "Please fill in all fields", "error");
       return;
     }
 
-    const data = { name, email, password };
+    const data = { email, password };
 
     try {
-      await rtkMutation(registerUser, data);
+      await rtkMutation(loginUser, data);
     } catch (err) {
       console.error(err);
-      showAlert("Oops", "An error occurred", "error");
+      showAlert("Oops", err?.data?.error || "An error occurred", "error");
     }
   };
 
@@ -57,19 +57,11 @@ export function Signup() {
   }
 
   return (
-    <AuthLayout title="Sign Up" description="Create an account to get started.">
+    <AuthLayout
+      title="Login"
+      description="Welcome back! Please enter your details."
+    >
       <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input
-            id="name"
-            type="text"
-            placeholder="Enter your name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
         <div className="space-y-2">
           <Label htmlFor="email">Email</Label>
           <Input
@@ -78,7 +70,7 @@ export function Signup() {
             placeholder="Enter your email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            required
+            // required
           />
         </div>
         <div className="space-y-2">
@@ -86,22 +78,21 @@ export function Signup() {
           <Input
             id="password"
             type="password"
-            placeholder="Create a password"
+            placeholder="Enter your password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            // required
           />
         </div>
-
         <Button type="submit" className="w-full">
-          Sign Up
+          Login
         </Button>
       </form>
       <div className="mt-4 text-center">
         <p>
-          Already have an account?{" "}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Login
+          Don't have an account?{" "}
+          <Link to="/signup" className="text-blue-600 hover:underline">
+            Sign up
           </Link>
         </p>
       </div>

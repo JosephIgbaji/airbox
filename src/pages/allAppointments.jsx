@@ -1,5 +1,4 @@
 import { AppointmentTable } from "@/components/AppointmentTable";
-import DashboardHeader from "@/components/dashboard-header";
 import DashboardLayout from "@/components/dashboard-layout";
 
 function AllAppointment() {

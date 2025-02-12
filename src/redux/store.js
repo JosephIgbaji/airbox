@@ -12,7 +12,7 @@ import {
 import { encryptTransform } from "redux-persist-transform-encrypt";
 import storage from "redux-persist/lib/storage";
 import register from "./registerSlice";
-import apiSlice from "./../service/api/apiSlice";
+import apiSlice from "../service/api/apiSlice";
 import user from "./userSlice";
 import hardSet from "redux-persist/es/stateReconciler/hardSet";
 

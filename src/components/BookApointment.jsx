@@ -27,9 +27,9 @@ export default function BookAppointment() {
 
   const location = useLocation();
 
-  const [selectedTime, setSelectedTime] = (useState < string) | (null > null);
+  const [selectedTime, setSelectedTime] = useState(null);
   const [title, setTitle] = useState("");
-  const [date, setDate] = (useState < Date) | (undefined > new Date());
+  const [date, setDate] = useState(undefined);
   const [addBooking, { error, isSuccess }] = useAddBookingMutation({
     provideTag: ["Booking"],
   });

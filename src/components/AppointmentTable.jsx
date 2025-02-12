@@ -1,9 +1,5 @@
 import * as React from "react";
 import {
-  ColumnDef,
-  ColumnFiltersState,
-  SortingState,
-  VisibilityState,
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
@@ -20,7 +16,6 @@ import {
   DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
@@ -40,18 +35,9 @@ import {
   useDeleteBookingMutation,
   useUpdateBookingMutation,
 } from "../service/booking.service";
-import rtkMutation from "./../utils/rtkMutation";
+import rtkMutation from "../utils/rtkMutation";
 // import axios from "axios";
 // import { useSelector } from "react-redux";
-
-type Booking = {
-  _id: string;
-  date: Date;
-  status: string;
-  time: string;
-  title: string;
-  price: number;
-};
 
 export function AppointmentTable() {
   const { data, isLoading, refetch } = useGetAllBookingQuery();
@@ -66,7 +52,7 @@ export function AppointmentTable() {
     }
   }, [isSuccess, deleteBooking, updateBooking]);
 
-  const HandleDelete = async (id: string) => {
+  const HandleDelete = async (id) => {
     try {
       await deleteBooking(id); // Call the delete mutation
       await refetch(); // Refetch the booking data after deleting
@@ -75,10 +61,7 @@ export function AppointmentTable() {
     }
   };
 
-  const handleStatusToggle = async (
-    bookingId: string,
-    currentStatus: string
-  ) => {
+  const handleStatusToggle = async (bookingId, currentStatus) => {
     const newStatus = currentStatus === "confirmed" ? "canceled" : "confirmed";
     try {
       await rtkMutation(
@@ -89,7 +72,7 @@ export function AppointmentTable() {
     }
   };
 
-  const columns: ColumnDef<Booking>[] = [
+  const columns = [
     {
       id: "select",
       header: ({ table }) => (
@@ -238,12 +221,11 @@ export function AppointmentTable() {
     },
   ];
 
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
+  const [sorting, setSorting] = React.useState < SortingState > [];
+  const [columnFilters, setColumnFilters] =
+    React.useState < ColumnFiltersState > [];
   const [columnVisibility, setColumnVisibility] =
-    React.useState<VisibilityState>({});
+    React.useState < VisibilityState > {};
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -273,7 +255,7 @@ export function AppointmentTable() {
         <div>
           <Input
             placeholder="Filter by title"
-            value={(table.getColumn("title")?.getFilterValue() as string) ?? ""}
+            value={table.getColumn("title")?.getFilterValue() ?? ""}
             onChange={(event) =>
               table.getColumn("title")?.setFilterValue(event.target.value)
             }
