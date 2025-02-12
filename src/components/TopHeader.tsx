@@ -16,7 +16,7 @@ export default function TopHeader() {
       setIsFullscreen(true);
     } else {
       document.exitFullscreen();
-      setIsFullscreen(false);
+      setIsFullscreen(isFullscreen && false);
     }
   };
 

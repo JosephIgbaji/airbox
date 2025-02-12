@@ -4,13 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AppointmentMiniTable } from "./AppointmentMiniTable";
 import { useGetAllBookingQuery } from "../service/booking.service";
 
-interface AppointmentListProps {
-  selectedDate: Date;
-}
-
-export default function AppointmentList({
-  selectedDate,
-}: AppointmentListProps) {
+export default function AppointmentList({ selectedDate }) {
   const { data, isLoading } = useGetAllBookingQuery();
   const [bookings, setBookings] = useState([]);
   // console.log(data);

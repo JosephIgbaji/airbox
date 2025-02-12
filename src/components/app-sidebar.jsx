@@ -35,7 +35,7 @@ import { logoutUser } from "../redux/userSlice";
 import { showAlert } from "../service/static/alert";
 
 export function AppSidebar() {
-  const user = useSelector((state: any) => state?.user?.user);
+  const user = useSelector((state) => state?.user?.user);
   // console.log(user);
   const navigate = useNavigate();
   const dispatch = useDispatch();

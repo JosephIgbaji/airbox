@@ -56,7 +56,7 @@ type Booking = {
 export function AppointmentTable() {
   const { data, isLoading, refetch } = useGetAllBookingQuery();
   const [deleteBooking] = useDeleteBookingMutation();
-  const [updateBooking, { error, isSuccess }] = useUpdateBookingMutation({
+  const [updateBooking, { isSuccess }] = useUpdateBookingMutation({
     provideTag: ["Booking"],
   });
 

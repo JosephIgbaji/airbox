@@ -3,14 +3,13 @@ import {
   TableBody,
   TableCaption,
   TableCell,
-  TableFooter,
   TableHead,
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
 
-export function AppointmentMiniTable({ data }: any) {
+export function AppointmentMiniTable({ data }) {
   // console.log(data);
   return (
     <>

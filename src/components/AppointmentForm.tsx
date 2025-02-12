@@ -3,26 +3,8 @@ import { Dialog, DialogContent, DialogTrigger } from "@/components/ui/dialog";
 
 import { Label } from "@/components/ui/label";
 import BookAppointment from "./BookApointment";
-import { useState } from "react";
 
 export default function AppointmentForm() {
-  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-  //   new Date()
-  // );
-  // const [currentMonth, setCurrentMonth] = useState(new Date());
-
-  // const handleDateSelect = (date: Date | undefined) => {
-  //   setSelectedDate(date);
-  // };
-
-  // const handleMonthChange = (increment: number) => {
-  //   setCurrentMonth((prevMonth) => {
-  //     const newMonth = new Date(prevMonth);
-  //     newMonth.setMonth(newMonth.getMonth() + increment);
-  //     return newMonth;
-  //   });
-  // };
-
   return (
     <Dialog>
       <DialogTrigger asChild>

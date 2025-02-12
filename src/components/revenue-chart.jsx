@@ -35,7 +35,7 @@ const options = {
   },
   plugins: {
     legend: {
-      position: "top" as const,
+      position: "top",
     },
   },
 };

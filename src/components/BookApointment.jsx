@@ -27,16 +27,16 @@ export default function BookAppointment() {
 
   const location = useLocation();
 
-  const [selectedTime, setSelectedTime] = useState<string | null>(null);
+  const [selectedTime, setSelectedTime] = (useState < string) | (null > null);
   const [title, setTitle] = useState("");
-  const [date, setDate] = useState<Date | undefined>(new Date());
+  const [date, setDate] = (useState < Date) | (undefined > new Date());
   const [addBooking, { error, isSuccess }] = useAddBookingMutation({
     provideTag: ["Booking"],
   });
   const navigate = useNavigate();
 
-  const token = useSelector((state: any) => state?.user?.token);
-  const expiration = useSelector((state: any) => state?.user?.expiration);
+  const token = useSelector((state) => state?.user?.token);
+  const expiration = useSelector((state) => state?.user?.expiration);
 
   const [timeSlots, setTimeSlots] = useState([
     "09:00",
@@ -63,7 +63,7 @@ export default function BookAppointment() {
     }
   }, [isSuccess, error, navigate]);
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!token || !expiration || new Date().getTime() > expiration) {
       return <Navigate to="/login" />;

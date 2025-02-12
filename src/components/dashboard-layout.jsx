@@ -5,8 +5,8 @@ import { SidebarProvider } from "./ui/sidebar";
 import { Navigate } from "react-router-dom";
 
 function DashboardLayout({ children }) {
-  const token = useSelector((state: any) => state?.user?.token);
-  const expiration = useSelector((state: any) => state?.user?.expiration);
+  const token = useSelector((state) => state?.user?.token);
+  const expiration = useSelector((state) => state?.user?.expiration);
 
   // console.log(new Date().getTime() > expiration);
   // if (!token) {

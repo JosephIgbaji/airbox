@@ -1,9 +1,5 @@
-import staff from "../assets/images/staff.svg";
-import student from "../assets/images/student.svg";
-import subject from "../assets/images/subject.svg";
-import teacher from "../assets/images/teacher.svg";
 import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { CalendarIcon, DollarSignIcon, UsersIcon } from "lucide-react";
+import { UsersIcon } from "lucide-react";
 import { useGetAllBookingQuery } from "../service/booking.service";
 import { useEffect, useState } from "react";
 
