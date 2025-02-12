@@ -52,7 +52,7 @@ export function Login() {
     }
   };
 
-  if (token && expiration) {
+  if (token && expiration && new Date().getTime() <= expiration) {
     return <Navigate to="/" />;
   }
 

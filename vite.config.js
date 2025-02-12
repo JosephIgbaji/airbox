@@ -9,8 +9,8 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src"),
     },
   },
-  build: {
-    outDir: "dist",
-    chunkSizeWarningLimit: 1000, // Default is 500 kB, increase to 1000 kB (1 MB)
-  },
+  // build: {
+  //   outDir: "dist",
+  //   chunkSizeWarningLimit: 1000, // Default is 500 kB, increase to 1000 kB (1 MB)
+  // },
 });

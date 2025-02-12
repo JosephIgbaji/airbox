@@ -205,11 +205,11 @@ export function AppointmentTable() {
             <DropdownMenuContent align="end">
               {/* <DropdownMenuLabel>Actions</DropdownMenuLabel> */}
 
-              <DropdownMenuItem
+              {/* <DropdownMenuItem
               // onClick={() => useUpdateBookingMutation(payment._id)}
               >
                 Edit
-              </DropdownMenuItem>
+              </DropdownMenuItem> */}
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={() => HandleDelete(payment._id)}>
                 Delete
@@ -221,11 +221,9 @@ export function AppointmentTable() {
     },
   ];
 
-  const [sorting, setSorting] = React.useState < SortingState > [];
-  const [columnFilters, setColumnFilters] =
-    React.useState < ColumnFiltersState > [];
-  const [columnVisibility, setColumnVisibility] =
-    React.useState < VisibilityState > {};
+  const [sorting, setSorting] = React.useState([]);
+  const [columnFilters, setColumnFilters] = React.useState([]);
+  const [columnVisibility, setColumnVisibility] = React.useState({});
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({

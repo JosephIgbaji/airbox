@@ -11,8 +11,7 @@ import AppointmentList from "@/components/AppointmentList";
 export default function AppointmentCalendar() {
   const [addEvent, setAddEvent] = useState(false);
 
-  const [selectedDate, setSelectedDate] =
-    (useState < Date) | (undefined > new Date());
+  const [selectedDate, setSelectedDate] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(new Date());
 
   const handleDateSelect = (date) => {

@@ -3,9 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
+import { Navigate } from "react-router-dom";
 
 export default function LandingPage() {
   const user = useSelector((state) => state?.user?.user);
+  const token = useSelector((state) => state?.user?.token);
+  const expiration = useSelector((state) => state?.user?.expiration);
+
   // console.log("User: ", user);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
@@ -19,6 +23,10 @@ export default function LandingPage() {
     setIsDarkMode(!isDarkMode);
     document.documentElement.classList.toggle("dark");
   };
+
+  // if (token && expiration && new Date().getTime() <= expiration) {
+  //   return <Navigate to="/" />;
+  // }
 
   return (
     <div className="min-h-screen dark:bg-background to-gray-100 dark:to-gray-900">
@@ -64,7 +72,7 @@ export default function LandingPage() {
               />
             </svg>
           </a>
-          {user ? (
+          {token && expiration && new Date().getTime() <= expiration ? (
             <p>{user.name}</p>
           ) : (
             <a href="/login" className="text-gray-600 border-b">
