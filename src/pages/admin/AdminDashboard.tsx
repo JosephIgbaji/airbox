@@ -16,7 +16,7 @@ function AdminDashboard() {
   // console.log(new Date().getTime() > expiration);
   // if (!token) {
   if (!token || !expiration || new Date().getTime() > expiration) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   return (

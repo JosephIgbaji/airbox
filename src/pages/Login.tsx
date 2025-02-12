@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { AuthLayout } from "../components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,12 @@ import { Label } from "@/components/ui/label";
 import { useLoginUserMutation } from "../service/user.service";
 import rtkMutation from "../utils/rtkMutation";
 import { showAlert } from "../service/static/alert";
+import { useSelector } from "react-redux";
 
 export function Login() {
+  const token = useSelector((state: any) => state?.user?.token);
+  const expiration = useSelector((state: any) => state?.user?.expiration);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
@@ -22,7 +26,7 @@ export function Login() {
   useEffect(() => {
     if (isSuccess) {
       showAlert("", "Login Successful!", "success");
-      navigate("/dashboard");
+      navigate("/");
     } else if (error) {
       console.log("Error: ", error);
       // showAlert("Oops", error || "An error occurred", "error");
@@ -47,6 +51,10 @@ export function Login() {
       showAlert("Oops", err?.data?.error || "An error occurred", "error");
     }
   };
+
+  if (token && expiration) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <AuthLayout

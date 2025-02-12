@@ -1,4 +1,4 @@
-import { GETALLBOOKINGS, ADDBOOKING } from "./constants";
+import { BOOKINGS } from "./constants";
 import apiSlice from "./api/apiSlice";
 
 export const userApiSlice = apiSlice.injectEndpoints({
@@ -6,7 +6,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     // Get Last update route
     addBooking: builder.mutation({
       query: (data) => ({
-        url: GETALLBOOKINGS,
+        url: BOOKINGS,
         method: "POST",
         body: data,
       }),
@@ -14,7 +14,7 @@ export const userApiSlice = apiSlice.injectEndpoints({
     }),
     updateBooking: builder.mutation({
       query: ({ id, data }) => ({
-        url: `${GETALLBOOKINGS}/${id}`,
+        url: `${BOOKINGS}/${id}`,
         method: "PUT",
         body: data,
       }),
@@ -23,14 +23,14 @@ export const userApiSlice = apiSlice.injectEndpoints({
 
     deleteBooking: builder.mutation({
       query: (id) => ({
-        url: `${GETALLBOOKINGS}/${id}`,
+        url: `${BOOKINGS}/${id}`,
         method: "DELETE",
       }),
       providesTags: ["Booking"],
     }),
     getAllBooking: builder.query({
       query: () => ({
-        url: ADDBOOKING,
+        url: BOOKINGS,
         method: "GET",
       }),
       providesTags: ["Booking"],

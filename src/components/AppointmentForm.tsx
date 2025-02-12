@@ -6,9 +6,9 @@ import BookAppointment from "./BookApointment";
 import { useState } from "react";
 
 export default function AppointmentForm() {
-  const [selectedDate, setSelectedDate] = useState<Date | undefined>(
-    new Date()
-  );
+  // const [selectedDate, setSelectedDate] = useState<Date | undefined>(
+  //   new Date()
+  // );
   // const [currentMonth, setCurrentMonth] = useState(new Date());
 
   // const handleDateSelect = (date: Date | undefined) => {
@@ -43,9 +43,7 @@ export default function AppointmentForm() {
         <form className="space-y-4">
           <div className="space-y-2">
             <Label className="font-semibold">Create Appointment</Label>
-            <div className="flex-1">
-              {selectedDate && <BookAppointment selectedDate={selectedDate} />}
-            </div>
+            <div className="flex-1">{<BookAppointment />}</div>
           </div>
         </form>
       </DialogContent>

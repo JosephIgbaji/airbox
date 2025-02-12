@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate, Navigate } from "react-router-dom";
+import { useNavigate, Navigate, useLocation } from "react-router-dom";
 import { format } from "date-fns";
 // import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Button } from "@/components/ui/button";
@@ -15,11 +15,18 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import rtkMutation from "../utils/rtkMutation";
-import { useAddBookingMutation } from "../service/booking.service";
+import {
+  useAddBookingMutation,
+  useGetAllBookingQuery,
+} from "../service/booking.service";
 import { showAlert } from "../service/static/alert";
 import { useSelector } from "react-redux";
 
 export default function BookAppointment() {
+  const { data, isLoading, refetch } = useGetAllBookingQuery();
+
+  const location = useLocation();
+
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [title, setTitle] = useState("");
   const [date, setDate] = useState<Date | undefined>(new Date());
@@ -46,6 +53,9 @@ export default function BookAppointment() {
       setDate(undefined);
       setTitle("");
       setSelectedTime(null);
+      if (location.pathname !== "/") {
+        refetch();
+      }
     } else if (error) {
       console.log("Error: ", error);
       showAlert("Oops", error?.data?.error || "An error occurred", "error");
@@ -84,20 +94,35 @@ export default function BookAppointment() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <div>
-            <Label htmlFor="time">Available Time Slots</Label>
-            <div className="grid grid-cols-3 gap-2 mt-2">
-              {timeSlots?.map((slot) => (
-                <Button
-                  key={slot}
-                  variant={selectedTime === slot ? "default" : "outline"}
-                  onClick={() => setSelectedTime(slot)}
-                >
-                  {slot}
-                </Button>
-              ))}
+          {location.pathname === "/" ? (
+            <div>
+              <Label htmlFor="time">Available Time Slots</Label>
+              <div className="grid grid-cols-3 gap-2 mt-2">
+                {timeSlots?.map((slot) => (
+                  <Button
+                    key={slot}
+                    variant={selectedTime === slot ? "default" : "outline"}
+                    onClick={() => setSelectedTime(slot)}
+                  >
+                    {slot}
+                  </Button>
+                ))}
+              </div>
             </div>
-          </div>
+          ) : (
+            <div>
+              <div>
+                <Label htmlFor="title">Time</Label>
+                <Input
+                  type="time"
+                  id="time"
+                  value={selectedTime}
+                  onChange={(e) => setSelectedTime(e.target.value)}
+                  placeholder="Choose Your Time"
+                />
+              </div>
+            </div>
+          )}
           <div>
             <Label htmlFor="title">Title</Label>
             <Input
@@ -107,43 +132,46 @@ export default function BookAppointment() {
               placeholder="Enter Reason for Appointment"
             />
           </div>
-          {/* <div>
-            <Label htmlFor="date">Date</Label>
-            <Input
-              id="date"
-              type="date"
-              value={date}
-              onChange={(e) => setDate(e.target.value)}
-              placeholder="Enter your nam"
-            />
-          </div> */}
-          <div className="w-full">
-            <Label className="block mb-1" htmlFor="date">
-              Date
-            </Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant={"outline"}
-                  className={cn(
-                    "w-[240px] justify-start text-left font-normal",
-                    !date && "text-muted-foreground"
-                  )}
-                >
-                  <CalendarIcon />
-                  {date ? format(date, "PPP") : <span>Pick a date</span>}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <Calendar
-                  mode="single"
-                  selected={date}
-                  onSelect={setDate}
-                  initialFocus
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+          {location.pathname !== "/" ? (
+            <div>
+              <Label htmlFor="date">Date</Label>
+              <Input
+                id="date"
+                type="date"
+                value={date}
+                onChange={(e) => setDate(e.target.value)}
+                placeholder="Enter your nam"
+              />
+            </div>
+          ) : (
+            <div className="w-full">
+              <Label className="block mb-1" htmlFor="date">
+                Date
+              </Label>
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[240px] justify-start text-left font-normal",
+                      !date && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon />
+                    {date ? format(date, "PPP") : <span>Pick a date</span>}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <Calendar
+                    mode="single"
+                    selected={date}
+                    onSelect={setDate}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          )}
           <Button
             onClick={handleSubmit}
             disabled={!selectedTime || !title || !date}

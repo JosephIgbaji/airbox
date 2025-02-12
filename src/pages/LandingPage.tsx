@@ -2,8 +2,11 @@ import BookAppointment from "@/components/BookApointment";
 import { Button } from "@/components/ui/button";
 import { Moon, Sun } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 export default function LandingPage() {
+  const user = useSelector((state) => state?.user?.user);
+  console.log("User: ", user);
   const [isDarkMode, setIsDarkMode] = useState(true);
 
   useEffect(() => {
@@ -38,7 +41,7 @@ export default function LandingPage() {
             href="/dashboard"
             className="text-gray-600  flex items-center gap-2"
           >
-            Admin Dashboard
+            Dashboard
             <svg
               width="16"
               height="16"
@@ -61,9 +64,13 @@ export default function LandingPage() {
               />
             </svg>
           </a>
-          <a href="/login" className="text-gray-600 border-b">
-            Sign In
-          </a>
+          {user ? (
+            <p>{user.name}</p>
+          ) : (
+            <a href="/login" className="text-gray-600 border-b">
+              Sign In
+            </a>
+          )}
         </div>
       </header>
 

@@ -45,7 +45,7 @@ export default function Settings() {
               </div>
             </CardContent>
             <CardFooter>
-              <Button>Save Changes</Button>
+              <Button disabled>Save Changes</Button>
             </CardFooter>
           </Card>
         </div>

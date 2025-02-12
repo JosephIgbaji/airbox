@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, Navigate } from "react-router-dom";
 import { AuthLayout } from "../components/AuthLayout";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,8 +9,12 @@ import { Label } from "@/components/ui/label";
 import { useRegisterUserMutation } from "../service/user.service";
 import rtkMutation from "../utils/rtkMutation";
 import { showAlert } from "../service/static/alert";
+import { useSelector } from "react-redux";
 
 export function Signup() {
+  const token = useSelector((state: any) => state?.user?.token);
+  const expiration = useSelector((state: any) => state?.user?.expiration);
+
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -47,6 +51,10 @@ export function Signup() {
       showAlert("Oops", "An error occurred", "error");
     }
   };
+
+  if (token && expiration) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <AuthLayout title="Sign Up" description="Create an account to get started.">

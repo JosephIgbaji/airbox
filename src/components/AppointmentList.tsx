@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { format } from "date-fns";
 import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { AppointmentMiniTable } from "./AppointmentMiniTable";
+import { useGetAllBookingQuery } from "../service/booking.service";
 
 interface AppointmentListProps {
   selectedDate: Date;
@@ -11,12 +12,23 @@ interface AppointmentListProps {
 export default function AppointmentList({
   selectedDate,
 }: AppointmentListProps) {
+  const { data, isLoading } = useGetAllBookingQuery();
+  const [bookings, setBookings] = useState([]);
+  // console.log(data);
   const formattedDate = format(selectedDate, "yyyy-MM-dd");
+  // console.log("Formated Date: ", formattedDate);
+  useEffect(() => {
+    if (data) {
+      setBookings(
+        data.filter(
+          (booking) => format(booking.date, "yyyy-MM-dd") === formattedDate
+        )
+      );
+      // console.log("Normal Date: ", data[0].date);
+    }
+  }, [selectedDate, data]);
 
-  const { data: availableSlots, isLoading } = useQuery({
-    queryKey: ["availableSlots", formattedDate],
-    queryFn: () => fetchAvailableSlots(formattedDate),
-  });
+  // console.log(bookings);
 
   if (isLoading) return <div>Loading available slots...</div>;
 
@@ -29,7 +41,7 @@ export default function AppointmentList({
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          <AppointmentMiniTable />
+          <AppointmentMiniTable data={bookings} />
         </div>
       </CardContent>
     </Card>

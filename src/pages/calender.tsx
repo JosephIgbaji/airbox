@@ -7,12 +7,8 @@ import { ChevronLeft, ChevronRight, PlusSquareIcon } from "lucide-react";
 import TitleHeaderBox from "@/components/title-header-box";
 import AppointmentForm from "@/components/AppointmentForm";
 import AppointmentList from "@/components/AppointmentList";
-import { useGetAllBookingQuery } from "../service/booking.service";
 
 export default function AppointmentCalendar() {
-  const { data, isLoading } = useGetAllBookingQuery();
-  // console.log(data);
-
   const [addEvent, setAddEvent] = useState(false);
 
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(
@@ -31,8 +27,6 @@ export default function AppointmentCalendar() {
       return newMonth;
     });
   };
-
-  if (isLoading) return <div>Loading...</div>;
 
   return (
     <div className="w-full">
