@@ -30,6 +30,7 @@ export default function BookAppointment() {
 
   const [selectedTime, setSelectedTime] = useState(null);
   const [title, setTitle] = useState("");
+  const [booking, setBooking] = useState(false);
   const [date, setDate] = useState(undefined);
   const [addBooking, { error, isSuccess }] = useAddBookingMutation({
     provideTag: ["Booking"],
@@ -62,12 +63,12 @@ export default function BookAppointment() {
       showAlert("Oops", error?.data?.error || "An error occurred", "error");
       // showAlert("Oops", "An error occurred", "error");
     }
+    setBooking(false);
   }, [isSuccess, error, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    console.log("Clicked");
+    setBooking(true);
 
     if (!token || !expiration || new Date().getTime() > expiration) {
       navigate("/login");
@@ -178,10 +179,12 @@ export default function BookAppointment() {
           )}
           <Button
             onClick={handleSubmit}
-            disabled={!selectedTime || !title || !date}
+            disabled={
+              booking ? true : false || !selectedTime || !title || !date
+            }
             className="w-full"
           >
-            {"Book Appointment"}
+            {booking ? "Booking" : "Book Appointment"}
           </Button>
           {/* {bookMutation.isSuccess && (
             <div className="text-green-600 mt-2">

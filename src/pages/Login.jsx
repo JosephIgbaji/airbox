@@ -17,6 +17,7 @@ export function Login() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loggingIn, setLoggingIn] = useState(false);
   const navigate = useNavigate();
 
   const [loginUser, { error, isSuccess }] = useLoginUserMutation({
@@ -32,11 +33,12 @@ export function Login() {
       // showAlert("Oops", error || "An error occurred", "error");
       showAlert("Oops", "An error occurred", "error");
     }
+    setLoggingIn(false);
   }, [isSuccess, error, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
+    setLoggingIn(true);
     if (!email || !password) {
       showAlert("Oops", error || "Please fill in all fields", "error");
       return;
@@ -84,7 +86,13 @@ export function Login() {
             // required
           />
         </div>
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          disabled={loggingIn ? true : false || !email || !password}
+          className={`${
+            loggingIn ? "cursor-not-allowed" : "cursor-pointer"
+          } w-full`}
+        >
           Login
         </Button>
       </form>

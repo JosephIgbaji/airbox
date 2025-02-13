@@ -18,6 +18,7 @@ export function Signup() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [signingUp, setSigningUp] = useState(false);
   const navigate = useNavigate();
   const [registerUser, { error, isSuccess }] = useRegisterUserMutation({
     provideTag: ["User"],
@@ -32,10 +33,12 @@ export function Signup() {
       showAlert("Oops", error.data?.error || "An error occurred", "error");
       // showAlert("Oops", "An error occurred", "error");
     }
+    setSigningUp(false);
   }, [isSuccess, error, navigate]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setSigningUp(true);
 
     if (!name || !email || !password) {
       showAlert("Oops", error || "Please fill in all fields", "error");
@@ -93,7 +96,13 @@ export function Signup() {
           />
         </div>
 
-        <Button type="submit" className="w-full">
+        <Button
+          type="submit"
+          disabled={signingUp ? true : false || !name || !email || !password}
+          className={`${
+            signingUp ? "cursor-not-allowed" : "cursor-pointer"
+          } w-full`}
+        >
           Sign Up
         </Button>
       </form>
