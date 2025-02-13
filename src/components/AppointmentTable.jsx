@@ -86,7 +86,12 @@ export function AppointmentTable() {
                 </TableCell>
 
                 <TableCell className="text-right">
-                  <div onClick={() => HandleDelete(booking._id)}>Delete</div>
+                  <div
+                    className="cursor-pointer hover:border-b text-red-500"
+                    onClick={() => HandleDelete(booking._id)}
+                  >
+                    Delete
+                  </div>
                 </TableCell>
               </TableRow>
             ))}
