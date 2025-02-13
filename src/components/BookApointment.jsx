@@ -26,6 +26,7 @@ export default function BookAppointment() {
   const { data, isLoading, refetch } = useGetAllBookingQuery();
 
   const location = useLocation();
+  const navigte = useNavigate();
 
   const [selectedTime, setSelectedTime] = useState(null);
   const [title, setTitle] = useState("");
@@ -65,8 +66,11 @@ export default function BookAppointment() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    console.log("Clicked");
+
     if (!token || !expiration || new Date().getTime() > expiration) {
-      return <Navigate to="/login" />;
+      navigate("/login");
     }
 
     if (!selectedTime || !title || !date) {
