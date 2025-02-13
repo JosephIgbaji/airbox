@@ -8,6 +8,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { format } from "date-fns";
+import { Switch } from "@/components/ui/switch";
+
 import {
   useGetAllBookingQuery,
   useDeleteBookingMutation,
@@ -20,7 +22,7 @@ import { useEffect, useState } from "react";
 
 export function AppointmentTable() {
   const { data, isLoading, refetch } = useGetAllBookingQuery();
-  console.log(data);
+  // console.log(data);
   const [deleteBooking] = useDeleteBookingMutation();
   const [updateBooking, { isSuccess }] = useUpdateBookingMutation({
     provideTag: ["Booking"],
@@ -126,7 +128,6 @@ export function AppointmentTable() {
 //   TableHeader,
 //   TableRow,
 // } from "@/components/ui/table";
-// import { Switch } from "@/components/ui/switch";
 
 // import {
 //   useGetAllBookingQuery,

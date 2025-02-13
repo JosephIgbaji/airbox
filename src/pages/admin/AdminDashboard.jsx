@@ -10,14 +10,14 @@ import AppointmentCalendar from "./../calender";
 import CustomSelector from "./../../components/CustomSelector";
 
 function AdminDashboard() {
-  // const token = useSelector((state) => state?.user?.token);
-  // const expiration = useSelector((state) => state?.user?.expiration);
+  const token = useSelector((state) => state?.user?.token);
+  const expiration = useSelector((state) => state?.user?.expiration);
 
-  // // console.log(new Date().getTime() > expiration);
-  // // if (!token) {
-  // if (!token || !expiration || new Date().getTime() > expiration) {
-  //   return <Navigate to="/" />;
-  // }
+  // console.log(new Date().getTime() > expiration);
+  // if (!token) {
+  if (!token || !expiration || new Date().getTime() > expiration) {
+    return <Navigate to="/" />;
+  }
 
   return (
     <>
