@@ -2,9 +2,29 @@
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { ScanSearchIcon, Moon, Sun, Scan } from "lucide-react";
+import {
+  Sheet,
+  SheetClose,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+  SheetTrigger,
+} from "@/components/ui/sheet";
+
+import {
+  ScanSearchIcon,
+  Moon,
+  Sun,
+  Scan,
+  SettingsIcon,
+  CalendarIcon,
+  LayoutDashboardIcon,
+  HomeIcon,
+} from "lucide-react";
 import { useEffect, useState } from "react";
-// import { PlusCircle } from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { HamburgerMenuIcon } from "@radix-ui/react-icons";
 
 export default function TopHeader() {
   const [isDarkMode, setIsDarkMode] = useState(true);
@@ -40,36 +60,104 @@ export default function TopHeader() {
         <Input type="search" placeholder="Search" className="w-[300px]" />
       </div>
 
-      <div className="flex items-center gap-2">
-        {/* Dark Mode Toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          className="border rounded"
-          onClick={toggleDarkMode}
-        >
-          {isDarkMode ? (
-            <Sun className="h-4 w-4" />
-          ) : (
-            <Moon className="h-4 w-4" />
-          )}
-        </Button>
+      <div className="flex items-center justify-between gap-2 w-full">
+        <div>
+          {/* Dark Mode Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="border rounded"
+            onClick={toggleDarkMode}
+          >
+            {isDarkMode ? (
+              <Sun className="h-4 w-4" />
+            ) : (
+              <Moon className="h-4 w-4" />
+            )}
+          </Button>
 
-        {/* Fullscreen Toggle */}
-        <Button
-          variant="ghost"
-          size="icon"
-          onClick={toggleFullscreen}
-          className="border rounded"
-        >
-          <Scan className="h-4 w-4" />
-        </Button>
+          {/* Fullscreen Toggle */}
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={toggleFullscreen}
+            className="border rounded"
+          >
+            <Scan className="h-4 w-4" />
+          </Button>
+        </div>
 
-        {/* User Profile */}
-        {/* <Avatar className="h-8 w-8">
-          <AvatarImage src="/placeholder-user.jpg" alt="User" />
-          <AvatarFallback>U</AvatarFallback>
-        </Avatar> */}
+        <div className=" lg:hidden">
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button variant="outline">
+                <HamburgerMenuIcon className="h-4 w-4" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent>
+              <div className="grid gap-4 py-4"></div>
+              <div className="space-y-2 py-2">
+                <SheetClose asChild>
+                  <NavLink to="/">
+                    {({ isActive }) => (
+                      <Button
+                        variant={isActive ? "secondary" : "ghost"}
+                        className="w-full justify-start"
+                      >
+                        <HomeIcon className="mr-2 h-4 w-4" />
+                        Home
+                      </Button>
+                    )}
+                  </NavLink>
+                </SheetClose>
+                <SheetClose asChild>
+                  <NavLink to="/dashboard">
+                    {({ isActive }) => (
+                      <Button
+                        variant={isActive ? "secondary" : "ghost"}
+                        className="w-full justify-start"
+                      >
+                        <LayoutDashboardIcon className="mr-2 h-4 w-4" />
+                        Dashboard
+                      </Button>
+                    )}
+                  </NavLink>
+                </SheetClose>
+                <SheetClose asChild>
+                  <NavLink to="/appointments">
+                    {({ isActive }) => (
+                      <Button
+                        variant={isActive ? "secondary" : "ghost"}
+                        className="w-full justify-start"
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        Appointments
+                      </Button>
+                    )}
+                  </NavLink>
+                </SheetClose>
+                <SheetClose asChild>
+                  <NavLink to="/settings">
+                    {({ isActive }) => (
+                      <Button
+                        variant={isActive ? "secondary" : "ghost"}
+                        className="w-full justify-start"
+                      >
+                        <SettingsIcon className="mr-2 h-4 w-4" />
+                        Settings
+                      </Button>
+                    )}
+                  </NavLink>
+                </SheetClose>
+              </div>
+              {/* <SheetFooter>
+          <SheetClose asChild>
+            
+          </SheetClose>
+        </SheetFooter> */}
+            </SheetContent>
+          </Sheet>
+        </div>
       </div>
     </header>
   );

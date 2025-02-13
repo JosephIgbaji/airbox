@@ -5,14 +5,14 @@ import { SidebarProvider } from "./ui/sidebar";
 import { Navigate } from "react-router-dom";
 
 function DashboardLayout({ children }) {
-  const token = useSelector((state) => state?.user?.token);
-  const expiration = useSelector((state) => state?.user?.expiration);
+  // const token = useSelector((state) => state?.user?.token);
+  // const expiration = useSelector((state) => state?.user?.expiration);
 
-  // console.log(new Date().getTime() > expiration);
-  // if (!token) {
-  if (!token || !expiration || new Date().getTime() > expiration) {
-    return <Navigate to="/login" />;
-  }
+  // // console.log(new Date().getTime() > expiration);
+  // // if (!token) {
+  // if (!token || !expiration || new Date().getTime() > expiration) {
+  //   return <Navigate to="/login" />;
+  // }
   return (
     <>
       <SidebarProvider>
